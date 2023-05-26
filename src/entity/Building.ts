@@ -19,6 +19,9 @@ export class Building extends BaseEntity  {
     @Column({length: 1111, nullable: true})
     address: string
 
+    @Column({length: 1111, nullable: true}) // Mysql data type
+    test_column: string
+
     @Column({type:'longtext', nullable: true})
     building_description_en: string
 
