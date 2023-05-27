@@ -1,4 +1,4 @@
-import { Building } from '../entity/Building';
+import { Building } from '../entity/building.entity';
 import { dataSource } from '../data-source';
 
 const db = dataSource.getRepository(Building);
@@ -29,8 +29,8 @@ const fetchBuildingsByBbox = async (
   north: number
 ): Promise<Building[]> => {
   const buildings = await db.createQueryBuilder('b')
-  .where(':north <= b.latitude && b.latitude <= :west', { north, west })
-  .andWhere(':south <= b.longitude && b.longitude <= :east', { south, east })
+  .where('b.latitude between :south and :north', { south, north })
+  .andWhere('b.longitude between :west and :east', { west, east })
   .getMany();
   return buildings;
 };

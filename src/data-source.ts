@@ -1,6 +1,6 @@
 import { DataSource } from "typeorm";
 import { DATABASE } from "./constants";
-import { Building } from "./entity/Building";
+import { Building } from "./entity/building.entity";
 
 export const dataSource = new DataSource({
   type: "mysql",
