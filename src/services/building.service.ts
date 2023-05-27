@@ -1,7 +1,9 @@
-import { Building } from '../entity/Building';
+import { Building } from '../entity/building.entity';
 import { dataSource } from '../data-source';
+import { BuildingTransaction } from '../entity/building_transaction.entity';
 
 const db = dataSource.getRepository(Building);
+const tnx = dataSource.getRepository(BuildingTransaction);
 
 const getBuildingById = async (id: number)
 : Promise<Building> => {
@@ -29,14 +31,22 @@ const fetchBuildingsByBbox = async (
   north: number
 ): Promise<Building[]> => {
   const buildings = await db.createQueryBuilder('b')
-  .where(':north <= b.latitude && b.latitude <= :west', { north, west })
-  .andWhere(':south <= b.longitude && b.longitude <= :east', { south, east })
+  .where('b.latitude between :south and :north', { south, north })
+  .andWhere('b.longitude between :west and :east', { west, east })
   .getMany();
   return buildings;
+};
+
+const fetchTransactionsByBuildingId = async (
+  building_id: number, 
+): Promise<BuildingTransaction[]> => {
+  const buildingTnxs = await tnx.find({where: { buildingId: building_id} })
+  return buildingTnxs;
 };
 
 export {
   getBuildingById,
   fetchBuildingsByLatitudeAndLongitude,
-  fetchBuildingsByBbox
+  fetchBuildingsByBbox,
+  fetchTransactionsByBuildingId
 };

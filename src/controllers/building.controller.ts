@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 import logger from '../config/logger.config';
-import { fetchBuildingsByBbox } from '../services/building.service';
+import { fetchBuildingsByBbox, fetchTransactionsByBuildingId } from '../services/building.service';
 import createError from 'http-errors';
 
 const fetchBuildings = async (req: any, res: any, next: NextFunction) => {
@@ -29,6 +29,27 @@ const fetchBuildings = async (req: any, res: any, next: NextFunction) => {
   }
 };
 
+const fetchBuildingTransaction = async (req: any, res: any, next: NextFunction) => {
+  try {
+      if(req.query.building_id && /^[0-9\.\-\,]+$/.exec(req.query.building_id)) {
+        const buildingId = req.query.building_id || -1;
+        if(buildingId != -1) {
+          const data = await fetchTransactionsByBuildingId(buildingId);
+          res.locals.result = { buildingTnxs: data };
+          next();
+        } else {
+          throw createError(400, 'Building id does not exist');
+        } 
+    } else {
+      throw createError(400, 'Invalid building id format');
+    }
+  } catch (err) {
+    logger.error(err);
+    next(err);
+  }
+};
+
 export {
   fetchBuildings,
+  fetchBuildingTransaction
 };
