@@ -12,7 +12,7 @@ app.set('port', process.env.NODE_PORT || 3000);
 app.set('env', process.env.NODE_ENV || 'dev');
 
 const corsOptions = {
-  origin: [process.env.ORIGIN],
+  origin: [process.env.ORIGIN, 'http://localhost:3000', 'http://192.168.1.122:3000'],
   credentials: true,
   optionSuccessStatus: 200,
 };
