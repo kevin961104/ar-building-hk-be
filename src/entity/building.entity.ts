@@ -41,9 +41,9 @@ export class Building extends BaseEntity  {
     @Column({length: 1111, nullable: true, charset: 'utf8mb4', collation: 'utf8mb4_unicode_ci'})
     building_description_zh: string
 
-    @Column("float")
+    @Column({type: "decimal", precision: 20, scale: 15, default: 0})
     latitude: number
 
-    @Column("float")
+    @Column({type: "decimal", precision: 20, scale: 15, default: 0})
     longitude: number
 }
